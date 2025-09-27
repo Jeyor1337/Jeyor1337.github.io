@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鱼饲料呀鱼饲料</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+        }
+        button {
+            margin: 5px;
+            padding: 5px 10px;
+        }
+        .error {
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>YSL编码</h1>
+    
+    <div>
+        <h3>原文本:</h3>
+        <textarea id="input" placeholder="请输入要编码的文本"></textarea>
+        <button onclick="encode()">编码 ↓</button>
+        <div id="encodeError" class="error">编码错误</div>
+    </div>
+
+    <div>
+        <h3>编码结果:</h3>
+        <textarea id="encoded" placeholder="编码结果"></textarea>
+    </div>
+
+    <div>
+        <h3>待解码文本:</h3>
+        <textarea id="encodedInput" placeholder="请输入要解码的鱼饲料文本"></textarea>
+        <button onclick="decode()">解码 ↓</button>
+        <div id="decodeError" class="error">解码错误：请确保输入仅包含"于思礼呦"四个字符</div>
+    </div>
+
+    <div>
+        <h3>解码结果:</h3>
+        <textarea id="decoded" placeholder="解码结果"></textarea>
+    </div>
+
+    <script>
+        const charMap = {
+            '00': '于',
+            '01': '思',
+            '10': '礼',
+            '11': '呦'
+        };
+
+        const reverseMap = {
+            '于': '00',
+            '思': '01',
+            '礼': '10',
+            '呦': '11'
+        };
+
+        function stringToBytes(str) {
+            const encoder = new TextEncoder();
+            return encoder.encode(str);
+        }
+
+        function bytesToBinary(bytes) {
+            return Array.from(bytes)
+                .map(byte => byte.toString(2).padStart(8, '0'))
+                .join('');
+        }
+
+        function binaryToChars(binary) {
+            let result = '';
+            for (let i = 0; i < binary.length; i += 2) {
+                const bits = binary.slice(i, i + 2);
+                result += charMap[bits];
+            }
+            return result;
+        }
+
+        function charsToBytes(chars) {
+            let binary = '';
+            for (const char of chars) {
+                if (!reverseMap[char]) {
+                    throw new Error('Invalid character');
+                }
+                binary += reverseMap[char];
+            }
+            
+            const bytes = new Uint8Array(binary.length / 8);
+            for (let i = 0; i < binary.length; i += 8) {
+                bytes[i / 8] = parseInt(binary.slice(i, i + 8), 2);
+            }
+            return bytes;
+        }
+
+        function bytesToString(bytes) {
+            const decoder = new TextDecoder();
+            return decoder.decode(bytes);
+        }
+
+        function encode() {
+            const input = document.getElementById('input').value;
+            document.getElementById('encodeError').style.display = 'none';
+            
+            try {
+                const bytes = stringToBytes(input);
+                const binary = bytesToBinary(bytes);
+                const encoded = binaryToChars(binary);
+                document.getElementById('encoded').value = encoded;
+            } catch (error) {
+                document.getElementById('encodeError').style.display = 'block';
+            }
+        }
+
+        function decode() {
+            const input = document.getElementById('encodedInput').value;
+            document.getElementById('decodeError').style.display = 'none';
+            
+            try {
+                const bytes = charsToBytes(input);
+                const decoded = bytesToString(bytes);
+                document.getElementById('decoded').value = decoded;
+            } catch (error) {
+                document.getElementById('decodeError').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
