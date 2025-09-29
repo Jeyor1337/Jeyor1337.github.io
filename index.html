@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>鱼饲料呀鱼饲料</title>
+    <title>于思礼编码</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,10 +24,25 @@
             color: red;
             display: none;
         }
+        .compress-option {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
-    <h1>YSL编码</h1>
+    <div class="compress-option">
+        <label>
+            <input type="checkbox" id="useCompression" onchange="updateCompression()">
+            启用预压缩
+        </label>
+    </div>
+
+    <h1>于思礼呦</h1>
     
     <div>
         <h3>原文本:</h3>
@@ -43,7 +58,7 @@
 
     <div>
         <h3>待解码文本:</h3>
-        <textarea id="encodedInput" placeholder="请输入要解码的鱼饲料文本"></textarea>
+        <textarea id="encodedInput" placeholder="请输入要解码的于思礼文本"></textarea>
         <button onclick="decode()">解码 ↓</button>
         <div id="decodeError" class="error">解码错误：请确保输入仅包含"于思礼呦"四个字符</div>
     </div>
@@ -67,6 +82,66 @@
             '礼': '10',
             '呦': '11'
         };
+
+        let useCompression = false;
+
+        function updateCompression() {
+            useCompression = document.getElementById('useCompression').checked;
+        }
+
+        function compress(str) {
+            if (!useCompression) return str;
+            
+            // RLE压缩
+            let compressed = '';
+            let count = 1;
+            let current = str[0];
+            
+            for (let i = 1; i < str.length; i++) {
+                if (str[i] === current) {
+                    count++;
+                } else {
+                    if (count > 3) {  // 当重复次数大于3时才使用压缩
+                        compressed += `${count}${current}`;
+                    } else {
+                        compressed += current.repeat(count);
+                    }
+                    current = str[i];
+                    count = 1;
+                }
+            }
+            
+            if (count > 3) {
+                compressed += `${count}${current}`;
+            } else {
+                compressed += current.repeat(count);
+            }
+            
+            return compressed;
+        }
+
+        function decompress(str) {
+            if (!useCompression) return str;
+            
+            let decompressed = '';
+            let numStr = '';
+            
+            for (let i = 0; i < str.length; i++) {
+                if (reverseMap[str[i]]) {
+                    if (numStr) {
+                        decompressed += str[i].repeat(parseInt(numStr) - 1);
+                        numStr = '';
+                    }
+                    decompressed += str[i];
+                } else if (/[0-9]/.test(str[i])) {
+                    numStr += str[i];
+                } else {
+                    throw new Error('Invalid compressed format');
+                }
+            }
+            
+            return decompressed;
+        }
 
         function stringToBytes(str) {
             const encoder = new TextEncoder();
@@ -117,7 +192,8 @@
                 const bytes = stringToBytes(input);
                 const binary = bytesToBinary(bytes);
                 const encoded = binaryToChars(binary);
-                document.getElementById('encoded').value = encoded;
+                const finalResult = compress(encoded);
+                document.getElementById('encoded').value = finalResult;
             } catch (error) {
                 document.getElementById('encodeError').style.display = 'block';
             }
@@ -128,7 +204,8 @@
             document.getElementById('decodeError').style.display = 'none';
             
             try {
-                const bytes = charsToBytes(input);
+                const decompressed = decompress(input);
+                const bytes = charsToBytes(decompressed);
                 const decoded = bytesToString(bytes);
                 document.getElementById('decoded').value = decoded;
             } catch (error) {
