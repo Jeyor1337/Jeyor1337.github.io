@@ -1,227 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haedus Client - Ultimate Minecraft client</title>
-    <!-- UI Libraries -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>鱼饲料呀鱼饲料</title>
     <style>
-        :root {
-            --primary-color: #007AFF;
-            --secondary-color: #5856D6;
-            --dark-bg: #000;
-        }
-
         body {
-            background-color: var(--dark-bg);
-            color: #fff;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
         }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            margin: 1rem 0;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.2);
-        }
-
-        .hero-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            position: relative;
-            overflow: hidden;
-        }
-
-        .download-btn {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            color: white;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .download-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-        }
-
-        .nav-link {
-            color: white !important;
-            margin: 0 1rem;
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-color);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
+        textarea {
             width: 100%;
+            height: 100px;
+            margin: 10px 0;
         }
-
-        @media (max-width: 768px) {
-            .glass-card {
-                margin: 0.5rem;
-            }
+        button {
+            margin: 5px;
+            padding: 5px 10px;
+        }
+        .error {
+            color: red;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);">
-        <div class="container">
-            <a class="navbar-brand" href="#">Haedus</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#features">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#download">Download</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#support">Support</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <h1>YSL编码</h1>
+    
+    <div>
+        <h3>原文本:</h3>
+        <textarea id="input" placeholder="请输入要编码的文本"></textarea>
+        <button onclick="encode()">编码 ↓</button>
+        <div id="encodeError" class="error">编码错误</div>
+    </div>
 
-    <!-- Hero Section -->
-    <section class="hero-section" id="home">
-        <div class="container text-center">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <h1 class="display-3 fw-bold mb-4" data-aos="fade-up">Haedus Client</h1>
-                    <p class="lead mb-4" data-aos="fade-up" data-aos-delay="100">
-                        Experience Minecraft Hack like never before with our client
-                    </p>
-                    <a href="#download" class="download-btn" data-aos="fade-up" data-aos-delay="200">
-                        Buy Now
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div>
+        <h3>编码结果:</h3>
+        <textarea id="encoded" placeholder="编码结果"></textarea>
+    </div>
 
-    <!-- Features Section -->
-    <section class="py-5" id="features">
-        <div class="container">
-            <h2 class="text-center mb-5" data-aos="fade-up">Features</h2>
-            <div class="row">
-                <div class="col-lg-4" data-aos="fade-up">
-                    <div class="glass-card text-center">
-                        <i class="fas fa-tachometer-alt feature-icon"></i>
-                        <h3>Optimized Performance</h3>
-                        <p>Enhanced FPS and reduced latency for competitive gameplay</p>
-                    </div>
-                </div>
-                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="glass-card text-center">
-                        <i class="fas fa-shield-alt feature-icon"></i>
-                        <h3>Advanced Combat</h3>
-                        <p>Improved hit registration and combat mechanics</p>
-                    </div>
-                </div>
-                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="glass-card text-center">
-                        <i class="fas fa-paint-brush feature-icon"></i>
-                        <h3>Custom UI</h3>
-                        <p>Fully customizable interface with modern design</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div>
+        <h3>待解码文本:</h3>
+        <textarea id="encodedInput" placeholder="请输入要解码的鱼饲料文本"></textarea>
+        <button onclick="decode()">解码 ↓</button>
+        <div id="decodeError" class="error">解码错误：请确保输入仅包含"于思礼呦"四个字符</div>
+    </div>
 
-    <!-- Download Section -->
-    <section class="py-5" id="download">
-        <div class="container">
-            <div class="glass-card text-center" data-aos="fade-up">
-                <h2>Ready to Play?</h2>
-                <p class="lead mb-4">Buy Haedus Client and join thousands of players</p>
-                <button class="download-btn">
-                    <i class="fas fa-download me-2"></i>Download v1.0.0
-                </button>
-            </div>
-        </div>
-    </section>
+    <div>
+        <h3>解码结果:</h3>
+        <textarea id="decoded" placeholder="解码结果"></textarea>
+    </div>
 
-    <!-- Support Section -->
-    <section class="py-5" id="support">
-        <div class="container">
-            <div class="glass-card" data-aos="fade-up">
-                <h2 class="text-center mb-4">Need Help?</h2>
-                <div class="row">
-                    <div class="col-md-6 mx-auto text-center">
-                        <p>Join our Discord community for support and updates</p>
-                        <a href="#" class="btn btn-primary">
-                            <i class="fab fa-discord me-2"></i>Join Discord
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-4" style="background: rgba(0,0,0,0.5);">
-        <div class="container text-center">
-            <p>&copy; 2025 Haedus Client. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-        AOS.init({
-            duration: 800,
-            once: true
-        });
+        const charMap = {
+            '00': '于',
+            '01': '思',
+            '10': '礼',
+            '11': '呦'
+        };
 
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+        const reverseMap = {
+            '于': '00',
+            '思': '01',
+            '礼': '10',
+            '呦': '11'
+        };
+
+        function stringToBytes(str) {
+            const encoder = new TextEncoder();
+            return encoder.encode(str);
+        }
+
+        function bytesToBinary(bytes) {
+            return Array.from(bytes)
+                .map(byte => byte.toString(2).padStart(8, '0'))
+                .join('');
+        }
+
+        function binaryToChars(binary) {
+            let result = '';
+            for (let i = 0; i < binary.length; i += 2) {
+                const bits = binary.slice(i, i + 2);
+                result += charMap[bits];
+            }
+            return result;
+        }
+
+        function charsToBytes(chars) {
+            let binary = '';
+            for (const char of chars) {
+                if (!reverseMap[char]) {
+                    throw new Error('Invalid character');
+                }
+                binary += reverseMap[char];
+            }
+            
+            const bytes = new Uint8Array(binary.length / 8);
+            for (let i = 0; i < binary.length; i += 8) {
+                bytes[i / 8] = parseInt(binary.slice(i, i + 8), 2);
+            }
+            return bytes;
+        }
+
+        function bytesToString(bytes) {
+            const decoder = new TextDecoder();
+            return decoder.decode(bytes);
+        }
+
+        function encode() {
+            const input = document.getElementById('input').value;
+            document.getElementById('encodeError').style.display = 'none';
+            
+            try {
+                const bytes = stringToBytes(input);
+                const binary = bytesToBinary(bytes);
+                const encoded = binaryToChars(binary);
+                document.getElementById('encoded').value = encoded;
+            } catch (error) {
+                document.getElementById('encodeError').style.display = 'block';
+            }
+        }
+
+        function decode() {
+            const input = document.getElementById('encodedInput').value;
+            document.getElementById('decodeError').style.display = 'none';
+            
+            try {
+                const bytes = charsToBytes(input);
+                const decoded = bytesToString(bytes);
+                document.getElementById('decoded').value = decoded;
+            } catch (error) {
+                document.getElementById('decodeError').style.display = 'block';
+            }
+        }
     </script>
 </body>
 </html>
